@@ -4,9 +4,10 @@
 
 """Top-level package for HyperCoast."""
 
-__author__ = """Qiusheng Wu"""
-__email__ = "giswqs@gmail.com"
-__version__ = "0.10.0"
+__author__ = """Gabryxx7"""
+__email__ = "giaga7@gmail.com"
+__version__ = "0.10.1"
 
+print("Gabry: Imported MDAP custom version of hypercoast")
 
 from .hypercoast import *

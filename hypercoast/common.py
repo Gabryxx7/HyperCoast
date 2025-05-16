@@ -8,7 +8,7 @@ import os
 import leafmap
 import xarray as xr
 from typing import List, Union, Dict, Optional, Tuple, Any
-
+import pyvista as pv
 
 def github_raw_url(url: str) -> str:
     """Get the raw URL for a GitHub file.
@@ -522,6 +522,8 @@ def image_cube(
     show_axes: bool = True,
     grid_origin=(0, 0, 0),
     grid_spacing=(1, 1, 1),
+    jupyter_backend: str = None,
+    interaction_event: pv.InteractionEventType = 'end',
     **kwargs: Any,
 ):
     """
@@ -562,7 +564,10 @@ def image_cube(
         pv.Plotter: The PyVista Plotter with the image cube added.
     """
 
-    import pyvista as pv
+    # import pyvista as pv      # Moved at the top to import types as well
+    
+    if jupyter_backend is not None:
+        pv.set_jupyter_backend(jupyter_backend)
 
     if rgb_args is None:
         rgb_args = {}
@@ -607,7 +612,7 @@ def image_cube(
         kwargs["show_edges"] = False
 
     if widget == "box":
-        p.add_mesh_clip_box(grid, cmap=cmap, clim=clim, **kwargs)
+        p.add_mesh_clip_box(grid, cmap=cmap, clim=clim, interaction_event=interaction_event, ** kwargs)
     elif widget == "plane":
         if "normal" not in kwargs:
             kwargs["normal"] = (0, 0, 1)
@@ -615,19 +620,19 @@ def image_cube(
             kwargs["invert"] = True
         if "normal_rotation" not in kwargs:
             kwargs["normal_rotation"] = False
-        p.add_mesh_clip_plane(grid, cmap=cmap, clim=clim, **kwargs)
+        p.add_mesh_clip_plane(grid, cmap=cmap, clim=clim, interaction_event=interaction_event, **kwargs)
     elif widget == "slice":
         if "normal" not in kwargs:
             kwargs["normal"] = (0, 0, 1)
         if "normal_rotation" not in kwargs:
             kwargs["normal_rotation"] = False
-        p.add_mesh_slice(grid, cmap=cmap, clim=clim, **kwargs)
+        p.add_mesh_slice(grid, cmap=cmap, clim=clim, interaction_event=interaction_event, **kwargs)
     elif widget == "orthogonal":
-        p.add_mesh_slice_orthogonal(grid, cmap=cmap, clim=clim, **kwargs)
+        p.add_mesh_slice_orthogonal(grid, cmap=cmap, clim=clim, interaction_event=interaction_event, **kwargs)
     elif widget == "threshold":
-        p.add_mesh_threshold(grid, cmap=cmap, clim=clim, **kwargs)
+        p.add_mesh_threshold(grid, cmap=cmap, clim=clim, interaction_event=interaction_event, **kwargs)
     else:
-        p.add_mesh(grid, cmap=cmap, clim=clim, **kwargs)
+        p.add_mesh(grid, cmap=cmap, clim=clim, interaction_event=interaction_event, **kwargs)
 
     if rgb_bands is not None or rgb_wavelengths is not None:
 
@@ -1139,3 +1144,4 @@ def show_field_data(
             m.add_layer(marker)
 
     return m
+

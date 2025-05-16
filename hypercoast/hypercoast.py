@@ -55,7 +55,7 @@ from .common import (
     download_acolite,
     run_acolite,
     pca,
-    show_field_data,
+    show_field_data
 )
 
 
